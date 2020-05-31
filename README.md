@@ -1,8 +1,10 @@
 # generator-jhipster-scripts
+
+> JHipster blueprint, create package.json scripts and package.json fixes for CI.
+
 [![NPM version](https://img.shields.io/npm/v/generator-jhipster-scripts.svg)](https://npmjs.org/package/generator-jhipster-scripts)
 [![NPM Test](https://github.com/mshima/generator-jhipster-scripts/workflows/NPM%20Test/badge.svg)](https://github.com/mshima/generator-jhipster-scripts/actions?query=workflow%3A%22NPM+Test%22)
 [![Dependency Status][daviddm-image]][daviddm-url]
-> JHipster blueprint, create package.json scripts and package.json fixes for CI.
 
 # Introduction
 
@@ -37,5 +39,5 @@ jhipster --blueprints scripts
 MIT © [Marcelo Shima]()
 
 
-[daviddm-image]: https://david-dm.org/mshima/generator-jhipster-customizer.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/mshima/generator-jhipster-customizer
+[daviddm-image]: https://david-dm.org/mshima/generator-jhipster-scripts.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/mshima/generator-jhipster-scripts
