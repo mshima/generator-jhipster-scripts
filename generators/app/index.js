@@ -111,10 +111,13 @@ function createGenerator(env) {
           scripts.set('ci:server:await', 'wait-on http://localhost:8080');
 
           if (scripts.get('e2e')) {
-            scripts.set(
-              'ci:e2e:timeout',
-              "sed -i -e 's/alertTimeout: 5000/alertTimeout: 1/1;' src/main/webapp/app/core/core.module.ts"
-            );
+            if (jhipsterConfig.get('clientFramework').startsWith('angular')) {
+              scripts.set(
+                'ci:e2e:timeout',
+                "sed -i -e 's/alertTimeout: 5000/alertTimeout: 1/1;' src/main/webapp/app/core/core.module.ts"
+              );
+            }
+
             scripts.set('preci:e2e', 'npm run ci:e2e:timeout');
             scripts.set(
               'ci:e2e',
