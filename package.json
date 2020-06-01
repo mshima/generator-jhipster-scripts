@@ -6,6 +6,10 @@
   ],
   "homepage": "https://github.com/mshima/generator-jhipster-scripts",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mshima/jhipster-scripts.git"
+  },
   "author": {
     "name": "Marcelo Shima",
     "email": "marceloshima@gmail.com",
