@@ -43,14 +43,22 @@ function createGenerator(env) {
 
             scripts.set('ci:test:prepare:docker', 'npm run docker:db');
             scripts.set('ci:e2e:prepare:docker', '');
-          } else if (databaseType === 'couchbase' || databaseType === 'cassandra') {
-            scripts.set('ci:test:prepare:docker', `docker-compose -f src/main/docker/${databaseType}.yml build`);
-            scripts.set('docker:db', `docker-compose -f src/main/docker/${databaseType}.yml up -d`);
-            scripts.set('ci:e2e:prepare:docker', 'npm run docker:db');
           } else {
-            scripts.set('ci:test:prepare:docker', 'npm run docker:db');
-            scripts.set('docker:db', `echo "Docker for db ${databaseType} not configured"`);
-            scripts.set('ci:e2e:prepare:docker', 'npm run docker:db');
+            const dockerFile = `src/main/docker/${databaseType}.yml`;
+            if (databaseType === 'couchbase' || databaseType === 'cassandra') {
+              scripts.set('ci:test:prepare:docker', `docker-compose -f ${dockerFile} build`);
+              scripts.set('docker:db', `docker-compose -f ${dockerFile} up -d`);
+              scripts.set('ci:e2e:prepare:docker', 'npm run docker:db');
+            } else {
+              if (this.fs.exists(this.destinationPath(dockerFile))) {
+                scripts.set('docker:db', `docker-compose -f ${dockerFile} up -d`);
+              } else {
+                scripts.set('docker:db', `echo "Docker for db ${databaseType} not configured"`);
+              }
+
+              scripts.set('ci:test:prepare:docker', 'npm run docker:db');
+              scripts.set('ci:e2e:prepare:docker', 'npm run docker:db');
+            }
           }
 
           const dockerAll = [];
