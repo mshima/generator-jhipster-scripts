@@ -153,12 +153,15 @@ jobs:
         if: ${{ always() }}
         run: npm run backend:info
         working-directory: ../app
+        id: backend_info
 
       - name: Backend javadoc
+        if: ${{ steps.backend_info.outcome == 'success' && always() }}
         run: npm run backend:doc:test
         working-directory: ../app
 
       - name: Backend test
+        if: ${{ steps.backend_info.outcome == 'success' && always() }}
         run: npm run backend:test
         working-directory: ../app
 
@@ -166,9 +169,10 @@ jobs:
         if: ${{ always() }}
         run: npm run java:jar
         working-directory: ../app
+        id: packaging
 
       - name: End-to-End
-        if: ${{ steps.configure.outputs.e2e == 'true' }}
+        if: ${{ steps.configure.outputs.e2e == 'true' && steps.packaging.outcome == 'success' && always() }}
         run: npm run ci:e2e
         working-directory: ../app
 ```
