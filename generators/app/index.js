@@ -116,9 +116,9 @@ function createGenerator(env) {
                 'ci:e2e:timeout',
                 "sed -i -e 's/alertTimeout: 5000/alertTimeout: 1/1;' src/main/webapp/app/core/core.module.ts"
               );
+              scripts.set('preci:e2e', 'npm run ci:e2e:timeout');
             }
 
-            scripts.set('preci:e2e', 'npm run ci:e2e:timeout');
             scripts.set(
               'ci:e2e',
               'concurrently -k -s first "npm:ci:server:start" "npm run ci:server:await && npm run e2e"'
