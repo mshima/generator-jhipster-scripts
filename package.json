@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mshima/jhipster-scripts.git"
+    "url": "git+https://github.com/mshima/generator-jhipster-scripts.git"
   },
   "author": {
     "name": "Marcelo Shima",
