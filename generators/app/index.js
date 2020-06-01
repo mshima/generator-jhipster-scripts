@@ -61,16 +61,18 @@ function createGenerator(env) {
             }
           }
 
-          const dockerAll = [];
+          const dockerOthers = [];
           ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(
-            dockerFile => {
-              if (this.fs.exists(this.destinationPath(`src/main/docker/dockerFile.yml`))) {
-                scripts.set(`docker:${dockerFile}`, `docker-compose -f src/main/docker/${dockerFile}.yml up -d`);
-                dockerAll.push(`npm run docker:${dockerFile}`);
+            dockerConfig => {
+              const dockerFile = `src/main/docker/${dockerConfig}.yml`;
+              if (this.fs.exists(this.destinationPath(dockerFile))) {
+                scripts.set(`docker:${dockerFile}`, `docker-compose -f ${dockerFile} up -d`);
+                dockerOthers.push(`npm run docker:${dockerConfig}`);
               }
             }
           );
-          scripts.set('docker:others', dockerAll.join(' && '));
+          scripts.set('docker:others', dockerOthers.join(' && '));
+
           const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.io.github.jhipster=OFF -Dlogging.level.${jhipsterConfig.get(
             'packageName'
           )}=OFF`;
@@ -124,6 +126,13 @@ function createGenerator(env) {
           }
 
           scripts.set('regenerate', 'jhipster --with-entities --skip-install');
+
+          const enableE2E = (jhipsterConfig.get('testFrameworks') || []).includes('protractor');
+          const githubConfigure = [
+            `echo "::set-output name=e2e::${enableE2E}"`,
+            `echo "::set-output name=docker_others::${dockerOthers.length > 0}"`
+          ];
+          scripts.set('ci:github:configure', githubConfigure.join(' && '));
         }
       };
     }
