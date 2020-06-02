@@ -66,7 +66,7 @@ function createGenerator(env) {
             dockerConfig => {
               const dockerFile = `src/main/docker/${dockerConfig}.yml`;
               if (this.fs.exists(this.destinationPath(dockerFile))) {
-                scripts.set(`docker:${dockerFile}`, `docker-compose -f ${dockerFile} up -d`);
+                scripts.set(`docker:${dockerConfig}`, `docker-compose -f ${dockerFile} up -d`);
                 dockerOthers.push(`npm run docker:${dockerConfig}`);
               }
             }
