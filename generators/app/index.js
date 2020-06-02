@@ -36,10 +36,10 @@ function createGenerator(env) {
             });
         },
         frontend() {
-          if (this.clientFramework.startsWith('angular')) {
+          if (this.clientFramework === 'react') {
+            this.scripts.set('ci:frontend:test', 'npm run test-ci');
+          } else {
             this.scripts.set('ci:frontend:test', 'npm test');
-          } else if (this.clientFramework === 'react') {
-            this.scripts.set('ci:frontend:test', 'npm test-ci');
           }
         },
         docker() {
