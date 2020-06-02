@@ -111,7 +111,7 @@ function createGenerator(env) {
             this.scripts.set('ci:backend:doc:test', './gradlew javadoc');
             this.scripts.set('java:jar', './gradlew bootJar -P"$JHI_PROFILE" -x test');
             this.scripts.set('java:war', './gradlew bootWar -P"$JHI_PROFILE" -Pwar -x test');
-            this.scripts.set('preci:server:start', 'cp build/libs/*SNAPSHOT.jar app.jar');
+            this.scripts.set('preci:server:start', 'cp build/libs/*SNAPSHOT.jar e2e.jar');
           }
 
           this.scripts.set(
