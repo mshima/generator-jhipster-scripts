@@ -50,7 +50,10 @@ function createGenerator(env) {
           if (databaseType === 'sql') {
             const prodDatabaseType = this.jhipsterConfig.get('prodDatabaseType');
             if (prodDatabaseType === 'no' || prodDatabaseType === 'oracle') {
-              this.scripts.set('docker:db', `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`);
+              this.scripts.set(
+                'docker:db',
+                `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`
+              );
             } else {
               this.scripts.set('docker:db', `docker-compose -f src/main/docker/${prodDatabaseType}.yml up -d`);
             }
@@ -67,7 +70,10 @@ function createGenerator(env) {
               if (this.fs.exists(this.destinationPath(dockerFile))) {
                 this.scripts.set('docker:db', `docker-compose -f ${dockerFile} up -d`);
               } else {
-                this.scripts.set('docker:db', `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`);
+                this.scripts.set(
+                  'docker:db',
+                  `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`
+                );
               }
 
               this.scripts.set('ci:test:prepare:docker', 'npm run docker:db');
