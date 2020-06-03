@@ -19,11 +19,13 @@ function createGenerator(env) {
       return {
         loadConfig() {
           this.packageJson = this.createStorage('package.json');
+          this.scripts = this.packageJson.createStorage('scripts');
+
           this.jhipsterConfig = this.createStorage('.yo-rc.json', 'generator-jhipster');
+          this.baseName = this.jhipsterConfig.get('baseName');
           this.clientFramework = this.jhipsterConfig.get('clientFramework') || 'angular';
           this.testFrameworks = this.jhipsterConfig.get('testFrameworks') || [];
           this.serverPort = this.jhipsterConfig.get('serverPort') || 8080;
-          this.scripts = this.packageJson.createStorage('scripts');
         },
         dependencies() {
           const devDependencies = this.packageJson.createStorage('devDependencies');
@@ -48,7 +50,7 @@ function createGenerator(env) {
           if (databaseType === 'sql') {
             const prodDatabaseType = this.jhipsterConfig.get('prodDatabaseType');
             if (prodDatabaseType === 'no' || prodDatabaseType === 'oracle') {
-              this.scripts.set('docker:db', `echo "Docker for db ${prodDatabaseType} not configured"`);
+              this.scripts.set('docker:db', `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`);
             } else {
               this.scripts.set('docker:db', `docker-compose -f src/main/docker/${prodDatabaseType}.yml up -d`);
             }
@@ -65,7 +67,7 @@ function createGenerator(env) {
               if (this.fs.exists(this.destinationPath(dockerFile))) {
                 this.scripts.set('docker:db', `docker-compose -f ${dockerFile} up -d`);
               } else {
-                this.scripts.set('docker:db', `echo "Docker for db ${databaseType} not configured"`);
+                this.scripts.set('docker:db', `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`);
               }
 
               this.scripts.set('ci:test:prepare:docker', 'npm run docker:db');
@@ -121,13 +123,13 @@ function createGenerator(env) {
             'ci:server:start',
             `java -jar app.jar --spring.profiles.active="$JHI_PROFILE" ${javaCommonLog} --logging.level.org.springframework.web=ERROR`
           );
-          // Wait the server to be up
-          this.scripts.set(
-            'ci:server:await',
-            `echo "Waiting for server at port ${this.serverPort} to start" && wait-on http://localhost:${this.serverPort} && echo "Server at port ${this.serverPort} started"`
-          );
 
           if (this.scripts.get('e2e')) {
+            // Wait the server to be up
+            this.scripts.set(
+              'ci:server:await',
+              `echo "Waiting for server at port ${this.serverPort} to start" && wait-on http://localhost:${this.serverPort} && echo "Server at port ${this.serverPort} started"`
+            );
             if (this.clientFramework.startsWith('angular')) {
               this.scripts.set(
                 'ci:e2e:timeout',
@@ -144,10 +146,11 @@ function createGenerator(env) {
             );
             this.scripts.set('e2e:dev', 'concurrently -k -s first "./mvnw" "npm run ci:server:await && npm run e2e"');
           } else {
+            this.scripts.set('ci:server:await', '');
             this.scripts.set('ci:e2e:package', '');
             this.scripts.set('ci:e2e:prepare', '');
-            this.scripts.set('ci:e2e:run', 'echo "E2E tests disabled for this application"');
-            this.scripts.set('e2e', 'echo "E2E tests disabled for this application"');
+            this.scripts.set('ci:e2e:run', `echo "E2E tests disabled for application ${this.baseName}"`);
+            this.scripts.set('e2e', `echo "E2E tests disabled for application ${this.baseName}"`);
           }
         },
         github() {
