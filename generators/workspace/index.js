@@ -53,7 +53,7 @@ function createGenerator(env) {
             if (dirent.name === 'docker-compose') {
               this.scripts.set(
                 'ci:e2e:prepare',
-                `ls node_modules || npm install && cd docker-compose && docker-compose up -d && docker ps -a && npm run ci:server:await && docker ps -a`
+                'ls node_modules || npm install && cd docker-compose && docker-compose up -d && docker ps -a && cd .. && npm run ci:server:await && docker ps -a'
               );
             } else if (dirent.name === 'kubernetes') {
               throw new Error('Kubernetes is not supported');
