@@ -1,4 +1,3 @@
-# @prettier
 name: Integration
 on: [push]
 env:
@@ -45,7 +44,7 @@ jobs:
       # Checkout Sample Repository
       #----------------------------------------------------------------------
       - name: Checkout sample repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       #----------------------------------------------------------------------
       # Install JHipster
@@ -80,6 +79,9 @@ jobs:
         working-directory: app
         id: app
 
+      #----------------------------------------------------------------------
+      # Print package.json, if doesn't exist, it's a microservice, create it.
+      #----------------------------------------------------------------------
       - name: Package.json information
         run: |
           cat package.json || jhipster workspace --force --blueprints scripts --local-config-only

@@ -1,6 +1,7 @@
 # generator-jhipster-scripts
 
 > JHipster blueprint, easily run CI on blueprints.
+
 [![NPM version](https://img.shields.io/npm/v/generator-jhipster-scripts.svg)](https://npmjs.org/package/generator-jhipster-scripts)
 [![NPM Test](https://github.com/mshima/generator-jhipster-scripts/workflows/NPM%20Test/badge.svg)](https://github.com/mshima/generator-jhipster-scripts/actions?query=workflow%3A%22NPM+Test%22)
 [![Dependency Status][daviddm-image]][daviddm-url]
@@ -74,19 +75,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node_version }}
-      - name: Download latest chrome binary
-        run: |
-          sudo apt update
-          sudo apt install google-chrome-stable
       - uses: actions/setup-java@v1
         with:
           java-version: '11.x'
-
-      #----------------------------------------------------------------------
-      # Create Application folder
-      #----------------------------------------------------------------------
-      - name: Create application folder
-        run: mkdir ../app
 
       #----------------------------------------------------------------------
       # Checkout Sample Repository
@@ -104,79 +95,100 @@ jobs:
       # Install scripts blueprint
       #----------------------------------------------------------------------
       - name: Install scripts blueprint
-        run: npm install -g generator-jhipster-scripts
+        run: npm link
 
+      #----------------------------------------------------------------------
+      # Create Application folder
+      #----------------------------------------------------------------------
+      - name: Create application folder
+        run: mkdir app
+ 
       #----------------------------------------------------------------------
       # Copy jdl file
       #----------------------------------------------------------------------
       - name: Copy jdl files
-        run: cp ${{ github.workspace }}/${{ matrix.jdl-file }} .
-        working-directory: ../app
+        run: cp ${{ github.workspace }}/path-to-samples/${{ matrix.jdl-file }} .
+        working-directory: app
 
       #----------------------------------------------------------------------
       # Generate project
       #----------------------------------------------------------------------
       - name: Project generation
-        run: jhipster import-jdl ${{ matrix.jdl-file }} --no-insight --blueprints scripts ${{ matrix.additional-parameters }}
-        working-directory: ../app
+        run: jhipster import-jdl ${{ matrix.jdl-file }} --no-insight --blueprints scripts --local-config-only ${{ matrix.additional-parameters }}
+        working-directory: app
+        id: app
 
+      #----------------------------------------------------------------------
+      # Print package.json, if doesn't exist, it's a microservice, create it.
+      #----------------------------------------------------------------------
       - name: Package.json information
         run: |
+          cat package.json || jhipster workspace --force --blueprints scripts --local-config-only
           cat package.json || true
           cat */package.json || true
-        working-directory: ../app
+        working-directory: app
 
       - name: Project information
         run: jhipster info
-        working-directory: ../app
+        working-directory: app
 
+      - name: Folder information
+        run: ls -la
+        working-directory: app
+ 
       #----------------------------------------------------------------------
       # Tests
       #----------------------------------------------------------------------
       - name: Configure github actions
         run: npm run ci:github:configure
-        working-directory: ../app
+        working-directory: app
         id: configure
 
       - name: Start db containers
         run: npm run ci:test:prepare:docker
-        working-directory: ../app
+        working-directory: app
 
       - name: Start others containers
         if: ${{ steps.configure.outputs.docker_others == 'true' }}
         run: npm run docker:others
-        working-directory: ../app
+        working-directory: app
 
       - name: Frontend tests
-        run: npm test
-        working-directory: ../app
+        run: npm run ci:frontend:test
+        working-directory: app
 
       - name: Backend info
-        if: ${{ always() }}
+        if: ${{ steps.app.outcome == 'success' && always() }}
         run: npm run backend:info
-        working-directory: ../app
+        working-directory: app
         id: backend_info
 
       - name: Backend javadoc
         if: ${{ steps.backend_info.outcome == 'success' && always() }}
         run: npm run backend:doc:test
-        working-directory: ../app
+        working-directory: app
 
       - name: Backend test
         if: ${{ steps.backend_info.outcome == 'success' && always() }}
-        run: npm run backend:test
-        working-directory: ../app
+        run: npm run ci:backend:test
+        working-directory: app
 
-      - name: Packaging
-        if: ${{ always() }}
-        run: npm run java:jar
-        working-directory: ../app
+      - name: E2E Packaging
+        if: ${{ steps.app.outcome == 'success' && always() }}
+        run: npm run ci:e2e:package
+        working-directory: app
         id: packaging
+
+      - name: E2E Prepare
+        if: ${{ steps.packaging.outcome == 'success' && always() }}
+        run: npm run ci:e2e:prepare
+        timeout-minutes: 5
+        working-directory: app
 
       - name: End-to-End
         if: ${{ steps.configure.outputs.e2e == 'true' && steps.packaging.outcome == 'success' && always() }}
-        run: npm run ci:e2e
-        working-directory: ../app
+        run: npm run ci:e2e:run
+        working-directory: app
 ```
 
 ## License
