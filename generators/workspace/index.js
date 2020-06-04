@@ -36,7 +36,7 @@ function createGenerator(env) {
             ['ci:e2e:package', 'java:docker'],
             ['ci:e2e:prepare'],
             'ci:server:await',
-            ['ci:e2e:run', 'e2e']
+            ['ci:e2e:run', 'e2e:run']
           ];
           ciScripts.forEach(ciScript => {
             const scriptName = Array.isArray(ciScript) ? ciScript[0] : ciScript;
@@ -53,7 +53,7 @@ function createGenerator(env) {
             if (dirent.name === 'docker-compose') {
               this.scripts.set(
                 'ci:e2e:prepare',
-                'ls node_modules || npm install && cd docker-compose && docker-compose up -d && docker ps -a && cd .. && npm run ci:server:await && docker ps -a'
+                'ls node_modules || npm install && cd docker-compose && docker-compose up -d && docker ps -a'
               );
             } else if (dirent.name === 'kubernetes') {
               throw new Error('Kubernetes is not supported');
