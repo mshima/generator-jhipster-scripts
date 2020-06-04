@@ -6,18 +6,19 @@
   ],
   "homepage": "https://github.com/mshima/generator-jhipster-scripts",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mshima/generator-jhipster-scripts.git"
-  },
   "author": {
     "name": "Marcelo Shima",
     "email": "marceloshima@gmail.com",
     "url": "https://github.com/mshima"
   },
   "files": [
+    "cli",
     "generators"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mshima/generator-jhipster-scripts.git"
+  },
   "devDependencies": {
     "xo": "^0.30.0",
     "mocha": "^7.1.2",

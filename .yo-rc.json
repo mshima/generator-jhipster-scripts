@@ -9,6 +9,10 @@
       "#app": {
         "name": "app",
         "yeomanEnvironmentVersion": "2.10.2"
+      },
+      "#workspace": {
+        "name": "workspace",
+        "yeomanEnvironmentVersion": "2.10.2"
       }
     },
     "packageNamespace": "jhipster-scripts",
@@ -22,9 +26,11 @@
     ":generator": {
       "#app": {
         "name": "app"
+      },
+      "#workspace": {
+        "name": "workspace"
       }
     },
-    "name": "app",
     "packageNamespace": "jhipster-scripts"
   },
   "@mshima/generator-node-package": {
