@@ -146,16 +146,15 @@ function createGenerator(env) {
 
             this.scripts.set('ci:e2e:package', 'npm run java:jar');
             this.scripts.set('ci:e2e:prepare', '');
-            this.scripts.set(
-              'ci:e2e:run',
-              'concurrently -k -s first "npm:ci:server:start" "npm run ci:server:await && npm run e2e"'
-            );
-            this.scripts.set('e2e:dev', 'concurrently -k -s first "./mvnw" "npm run ci:server:await && npm run e2e"');
+            this.scripts.set('e2e:run', 'npm run ci:server:await && npm run e2e');
+            this.scripts.set('ci:e2e:run', 'concurrently -k -s first "npm:ci:server:start" "npm run e2e:run"');
+            this.scripts.set('e2e:dev', 'concurrently -k -s first "./mvnw" "e2e:run"');
           } else {
             this.scripts.set('ci:server:await', '');
             this.scripts.set('ci:e2e:package', '');
             this.scripts.set('ci:e2e:prepare', '');
             this.scripts.set('ci:e2e:run', `echo "E2E tests disabled for application ${this.baseName}"`);
+            this.scripts.set('e2e:run', `echo "E2E tests disabled for application ${this.baseName}"`);
             this.scripts.set('e2e', `echo "E2E tests disabled for application ${this.baseName}"`);
           }
         },
