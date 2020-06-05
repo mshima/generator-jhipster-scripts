@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster-scripts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JHipster blueprint, easily run CI on blueprints",
   "keywords": [
     "jhipster-blueprint",
