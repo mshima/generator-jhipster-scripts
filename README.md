@@ -1,10 +1,9 @@
-npm install -g# generator-jhipster-scripts
-
-> JHipster blueprint, easily run CI on blueprints.
-
+# generator-jhipster-scripts
 [![NPM version](https://img.shields.io/npm/v/generator-jhipster-scripts.svg)](https://npmjs.org/package/generator-jhipster-scripts)
 [![NPM Test](https://github.com/mshima/generator-jhipster-scripts/workflows/NPM%20Test/badge.svg)](https://github.com/mshima/generator-jhipster-scripts/actions?query=workflow%3A%22NPM+Test%22)
 [![Dependency Status][daviddm-image]][daviddm-url]
+
+> JHipster blueprint, easily run CI on blueprints.
 
 # Introduction
 
