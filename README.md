@@ -1,4 +1,4 @@
-# generator-jhipster-scripts
+npm install -g# generator-jhipster-scripts
 
 > JHipster blueprint, easily run CI on blueprints.
 
@@ -95,7 +95,7 @@ jobs:
       # Install scripts blueprint
       #----------------------------------------------------------------------
       - name: Install scripts blueprint
-        run: npm link
+        run: npm install -g generator-jhipster-scripts
 
       #----------------------------------------------------------------------
       # Create Application folder
