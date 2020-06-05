@@ -1,7 +1,9 @@
 {
   "name": "generator-jhipster-scripts",
   "version": "1.0.0",
+  "description": "JHipster blueprint, easily run CI on blueprints",
   "keywords": [
+    "jhipster-blueprint",
     "jhipster-blueprint"
   ],
   "homepage": "https://github.com/mshima/generator-jhipster-scripts",
