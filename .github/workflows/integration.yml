@@ -41,22 +41,22 @@ jobs:
           java-version: '11.x'
 
       #----------------------------------------------------------------------
-      # Checkout Sample Repository
+      # Checkout Blueprint
       #----------------------------------------------------------------------
-      - name: Checkout sample repository
+      - name: Checkout blueprint
         uses: actions/checkout@v2
+
+      #----------------------------------------------------------------------
+      # Install Blueprint
+      #----------------------------------------------------------------------
+      - name: Link blueprint
+        run: npm link
 
       #----------------------------------------------------------------------
       # Install JHipster
       #----------------------------------------------------------------------
       - name: Install jhipster
         run: npm install -g ${{ matrix.jhi-gen-version }}
-
-      #----------------------------------------------------------------------
-      # Install scripts blueprint
-      #----------------------------------------------------------------------
-      - name: Install scripts blueprint
-        run: npm link
 
       #----------------------------------------------------------------------
       # Create Application folder
