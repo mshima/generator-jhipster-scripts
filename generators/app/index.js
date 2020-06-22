@@ -104,6 +104,7 @@ function createGenerator(env) {
           this.scripts.set('backend:doc:test', 'npm run ci:backend:doc:test');
           const buildTool = this.jhipsterConfig.get('buildTool');
           if (buildTool === 'maven') {
+            this.scripts.set('backend:test', './mvnw -ntp -P-webpack verify --batch-mode');
             this.scripts.set('backend:info', './mvnw -ntp enforcer:display-info --batch-mode');
             this.scripts.set(
               'ci:backend:test',
